@@ -1,0 +1,34 @@
+Использованные инструменты:
+erlang R13B04
+mnesia
+yaws
+uuid (gitorious.org).
+
+----
+Распаковка, компиляция:
+tar xzf erlstock.tar.gz
+# yaws
+cd erlbilling/deps/yaws
+cd ../yaws
+autoconf
+./configure
+make
+cd ../..
+
+Запуск:
+erlc -o ebin src/*.erl
+erl -pa ebin
+stockserver:start_link(init).
+
+Запуск в последующие разы:
+erl -pa ebin
+application:start(erlstock).
+
+Запуск сервера происходит на 0.0.0.0:8081.
+Веб интерфейс http://localhost:8081/
+
+Для создания ценной бумаги служит форма. Форма создает 1 ценную бумагу с идентификатором, названием, ценой за единицу, общим объемом сделки.
+http://localhost:8081/addstock.yaws
+
+Для отображения списка созданных ценных бумаг служит форма.
+http://localhost:8081/stocklist.yaws

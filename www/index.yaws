@@ -1,0 +1,9 @@
+<html>
+<h1>Stock Exchange. Transactions in securities</h1>
+<p>
+<a href="addstock.yaws">Add a stock securities</a>
+</p>
+<p>
+<a href="stocklist.yaws">Show list of all stock securities</a>
+</p>
+</html>

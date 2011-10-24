@@ -1,0 +1,34 @@
+<html>
+<h1>List of all stock securities</h1>
+<erl>
+out(A) ->
+		    AddTd = fun(Val) ->
+                                    if is_binary(Val) == true ->
+                                            {td, [], uuid:to_string(Val)};
+                                       is_number(Val) == true ->
+					    {td, [], f("~p", [Val])};
+                                       true ->
+                                            {td, [], f("~p", [Val])}
+                                    end
+                            end,
+                    AddTr = fun(Val) ->
+                                    if
+                                        is_tuple(Val) == true ->
+                                            [stock | Rest] = tuple_to_list(Val),
+                                            {tr, [], lists:map(AddTd, Rest)};
+                                        is_list(Val) == true ->
+                                            {tr, [], lists:map(AddTd, Val)}
+                                    end
+                            end,
+    Stocks = stockserver:stock_list(),
+    {ehtml, [{table, [],
+             lists:append([[{tr, [], [{td, [], "Id"},
+				      {td, [], "Name"},
+                                      {td, [], "Price"},
+                                      {td, [], "Count"},
+                                      {td, [], "Time"}]}],
+                           lists:map(AddTr, Stocks)])},
+            {p, [], {b, [], f("Total: ~w", [length(Stocks)])}}]}.
+</erl>
+<p><a href="index.yaws">Index</a></p>
+</html>

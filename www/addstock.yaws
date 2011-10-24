@@ -1,0 +1,30 @@
+<html>
+<h1>Add Stock</h1>
+<erl>
+out(A) ->
+    Req = A#arg.req,
+    
+    if
+        Req#http_request.method == 'GET' ->
+            {ehtml, {form, [{action, "addstock.yaws"},{method, "post"}],
+                     [{p, [], "Stock name"},
+                      {input, [{name, stockname}, {type, text}]},
+                      {p, [], "Stock price"},
+                      {input, [{name, stockprice}, {type, text}]},
+                      {p, [], "Stock Count"},
+                      {input, [{name, stockcount}, {type, text}]},
+                      {input, [{type, submit}]}]}};
+        
+        Req#http_request.method == 'POST' ->
+            L = yaws_api:parse_post(A),
+            [{"stockname", NameStr}, {"stockprice", PriceStr}, {"stockcount", CountStr}|_] = L,
+            Name = NameStr,            
+            {Price, _} = string:to_integer(PriceStr),
+            {Count, _} = string:to_integer(CountStr),
+            stockserver:add_stock(Name, Price, Count),            
+            {ehtml, {p, [], "Success"}};
+        true -> {ehtml, {p, [], "Error"}}
+    end.
+</erl>
+<a href="index.yaws">Index</a>
+</html>
